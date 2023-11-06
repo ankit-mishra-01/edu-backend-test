@@ -1,6 +1,9 @@
 const express = require("express");
 const cors = require("cors");
 const dbConfig = require("./app/config/db.config");
+const dotenv=require('dotenv')
+
+dotenv.config()
 
 const app = express();
 
@@ -32,17 +35,19 @@ app.use(express.urlencoded({ extended: true }));
 
 const db = require("./app/models");
 const Role = db.role;
-const mongo_url = "mongodb+srv://sahtushar:Kotak123@@edusession-db.i0kzexx.mongodb.net/test";
+const mongo_url =  process.env.DATABASE_URL;
+
+
 db.mongoose
   .connect(
-    `${process.env.mongo_url || mongo_url}`,
+    `${process.env.DATABASE_URL || mongo_url}`,
     {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     }
   )
   .then(() => {
-    console.log("Successfully connect to MongoDB.");
+    console.log("Successfully connected to MongoDB.");
     initial();
   })
   .catch((err) => {
